@@ -1,0 +1,70 @@
+The Audiolab MDAC (an audio device) has some problems with recent Linux kernel
+versions due to split transaction scheduling in the ehci-hcd driver.
+
+I'm going to investigate it further and push for a proper fix,
+but in the meantime, there's this workaround.
+
+It basically just patches ehci-sched.c with a reverting patch and rebuilds
+the kernel image, since Ubuntu compiles ehci-hcd with the kernel,
+NOT as a standalone module.
+
+The offending commits are
+3e619d04159be54b3daa0b7036b0ce9e067f4b5d
+e3420901eba65b1c46bed86d360e3a8685d20734 + 811c926c538f7e8d3c08b630dd5844efd7e000f6
+
+This tool was created for "ordinary folk", and therefore, for Ubuntu.
+If you're a skilled kernel programmer who maintains his own kernel,
+then by all means revert the aforementioned commits and forget about
+this simple Makefile "tool".
+
+
+
+== How to use ==
+
+
+=== Preparation ===
+
+1) download a tarball/zip from Github's Tags page,
+   https://github.com/comps/ehci-mdac/tags
+
+2) extract it and "cd" into the directory
+
+All temporary files will reside in this directory, so you can easily remove it
+once all is done.
+
+3) make sure to have "make" installed,
+   sudo apt-get install make
+
+
+=== Execution ===
+
+If you don't mind the script building the modules with root privileges,
+then by all means run "sudo make install". This is the recommended way
+for most people.
+
+As an alternative (or for debugging purposes), you can run each step manually:
+
+source builddep patch build install
+
+
+1) download, and upstream-patch the kernel source
+   make source
+
+2) install build dependencies (with minimal other deps),
+   sudo make builddep
+
+3) patch the ehci-sched.c source,
+   make patch
+
+4) build the kernel, without modules (not needed),
+   make build
+
+5) install the new .deb packages with kernel image and headers,
+   sudo make install
+
+
+=== Cleanup ===
+
+And that's about it!
+Feel free to remove the unzipped directory and the downloaded zip/tarball.
+
