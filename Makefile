@@ -3,7 +3,7 @@
 
 KVER = $(shell uname -r)
 
-all: source builddep patch build install
+all: source builddep patch build
 
 .PHONY: source
 source:
@@ -27,6 +27,6 @@ build:
 	fakeroot debian/rules clean binary-headers binary-generic
 
 .PHONY: install
-install:
+install: source builddep patch build
 	dpkg -i linux*.deb
 
