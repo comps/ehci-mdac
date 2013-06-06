@@ -1,3 +1,6 @@
+DISCLAIMER: I don't use Ubuntu, this is just for the poor people that do
+
+
 The Audiolab MDAC (an audio device) has some problems with recent Linux kernel
 versions due to split transaction scheduling in the ehci-hcd driver.
 
@@ -18,9 +21,7 @@ then by all means revert the aforementioned commits and forget about
 this simple Makefile "tool".
 
 
-
 == How to use ==
-
 
 === Preparation ===
 
@@ -34,7 +35,6 @@ once all is done.
 
 3) make sure to have "make" installed,
    sudo apt-get install make
-
 
 === Execution ===
 

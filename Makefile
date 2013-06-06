@@ -1,10 +1,7 @@
 # based on https://wiki.ubuntu.com/Kernel/BuildYourOwnKernel
+# (an Ubuntu-only version!)
 
 KVER = $(shell uname -r)
-
-# use the one downloaded via apt-get source, expand on use
-# (yeah, really ugly, I know)
-KDIR = $(dirname $(ls linux-*/MAINTAINERS))
 
 all: source builddep patch build install
 
@@ -25,8 +22,9 @@ patch:
 
 .PHONY: build
 build:
-	( cd "$(KDIR)" && fakeroot debian/rules clean )
-	( cd "$(KDIR)" && fakeroot debian/rules binary-headers binary-generic )
+	cd "`ls linux-*/MAINTAINERS | xargs dirname`"; \
+	unset MAKELEVEL; \
+	fakeroot debian/rules clean binary-headers binary-generic
 
 .PHONY: install
 	dpkg -i linux*.deb
