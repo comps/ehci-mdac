@@ -1,0 +1,78 @@
+The Audiolab MDAC (an audio device) has some problems with recent Linux kernel
+versions due to split transaction scheduling in the ehci-hcd driver.
+
+I'm going to investigate it further and push for a proper fix,
+but in the meantime, there's this workaround.
+
+It basically just patches ehci-sched.c with a reverting patch and rebuilds
+and "installs" ehci-hcd.ko in /lib/modules. In a fully automated fashion.
+
+The offending commits are
+3e619d04159be54b3daa0b7036b0ce9e067f4b5d
+e3420901eba65b1c46bed86d360e3a8685d20734 + 811c926c538f7e8d3c08b630dd5844efd7e000f6
+
+This tool was created for "ordinary folk", and therefore, for Ubuntu.
+If you're a skilled kernel programmer who maintains his own kernel,
+then by all means revert the aforementioned commits and forget about
+this simple Makefile "tool".
+
+
+
+== How to use ==
+
+
+=== Preparation ===
+
+1) download a tarball/zip from Github's Tags page,
+   https://github.com/comps/ehci-mdac/tags
+
+2) extract it and "cd" into the directory
+
+All temporary files will reside in this directory, so you can easily remove it
+once all is done.
+
+3) make sure you have at least 10GB of free disk space and several spare
+   hours of computer time (ie. not running on battery) as the tool will run
+   "make modules" on the kernel source, which - in case of Ubuntu - results in
+   huge amount of modules and time wasted
+
+This is because of CONFIG_MODVERSIONS enabled and Module.symvers required
+(at least by Ubuntu kernels). The only solution I know of is to rebuild all
+modules, so the Module.symvers file can be created.
+If you're running your own lightweight nearly-module-less kernel, then
+substitute "10GB" for "2GB" and "several hours" for "10 minutes", of course.
+
+4) make sure to have "make" installed,
+   sudo apt-get install make
+
+
+=== Execution ===
+
+If you don't mind the script building the modules with root privileges,
+then by all means run "sudo make install". This is the recommended way
+for most people.
+
+As an alternative (or for debugging purposes), you can run each step manually:
+
+1) install build dependencies (with minimal other deps),
+   sudo make builddep
+
+2) download, configure and build kernel source / modules, this might take ages,
+   make source_prepare
+
+3) patch the ehci-sched.c source,
+   make patch
+
+4) rebuild it,  (needed?)
+   make build
+
+5) copy the new .ko module to /lib/modules, don't call modules_install,
+   which could remove more than we want,
+   sudo make install
+
+
+=== Cleanup ===
+
+And that's about it!
+Feel free to remove the unzipped directory and the downloaded zip/tarball.
+
