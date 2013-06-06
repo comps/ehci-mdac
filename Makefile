@@ -27,5 +27,6 @@ build:
 	fakeroot debian/rules clean binary-headers binary-generic
 
 .PHONY: install
+install:
 	dpkg -i linux*.deb
 

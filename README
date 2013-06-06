@@ -36,6 +36,12 @@ once all is done.
 3) make sure to have "make" installed,
    sudo apt-get install make
 
+4) make sure to have at least 11GB of free disk space and several spare hours
+   of computer time (ie. not running on battery)
+   - the kernel+modules rebuild takes about 10GB of temporary files, which
+     can be removed afterwards, see cleanup below
+   - on dualcore Intel i5 CPU it took about 2 hours
+
 === Execution ===
 
 If you don't mind the script building the modules with root privileges,
@@ -44,23 +50,31 @@ for most people.
 
 As an alternative (or for debugging purposes), you can run each step manually:
 
-source builddep patch build install
-
-
 1) download, and upstream-patch the kernel source
-   make source
+   $ make source
 
 2) install build dependencies (with minimal other deps),
-   sudo make builddep
+   $ sudo make builddep
 
 3) patch the ehci-sched.c source,
-   make patch
+   $ make patch
 
 4) build the kernel, without modules (not needed),
-   make build
+   $ make build
 
 5) install the new .deb packages with kernel image and headers,
-   sudo make install
+   $ sudo make install
+
+6) (optional) hold the linux-image package, so the newly installed kernel
+   doesn't get replaced by a stock updated one - this is potentially a bad
+   idea as the updates might contain important changes
+     a) if you prefer less future hassle, do this step,
+     b) if you really want the future kernel fixes/features, skip this step,
+        you can simply re-run this entire tool when the kernel gets updated
+        in the future
+
+   (untested, not dangerous, but might just not work)
+   $ sudo apt-mark hold linux-image
 
 
 === Cleanup ===
