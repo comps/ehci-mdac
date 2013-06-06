@@ -34,7 +34,7 @@ All temporary files will reside in this directory, so you can easily remove it
 once all is done.
 
 3) make sure to have "make" installed,
-   sudo apt-get install make
+   $ sudo apt-get install make
 
 4) make sure to have at least 11GB of free disk space and several spare hours
    of computer time (ie. not running on battery)
@@ -59,7 +59,7 @@ As an alternative (or for debugging purposes), you can run each step manually:
 3) patch the ehci-sched.c source,
    $ make patch
 
-4) build the kernel, without modules (not needed),
+4) build the kernel, including modules, create .deb packages,
    $ make build
 
 5) install the new .deb packages with kernel image and headers,
