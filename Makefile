@@ -3,6 +3,10 @@
 
 KVER = $(shell uname -r)
 
+# use the one downloaded via apt-get source, expand on use
+# (yeah, really ugly, I know)
+KDIR = `ls linux-*/MAINTAINERS | xargs dirname`
+
 all: source builddep patch build
 
 .PHONY: source
@@ -22,7 +26,7 @@ patch:
 
 .PHONY: build
 build:
-	cd "`ls linux-*/MAINTAINERS | xargs dirname`"; \
+	cd "$(KDIR)"; \
 	unset MAKELEVEL; \
 	fakeroot debian/rules clean binary-headers binary-generic
 
