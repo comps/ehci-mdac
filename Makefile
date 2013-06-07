@@ -7,17 +7,17 @@ KVER = $(shell uname -r)
 # (yeah, really ugly, I know)
 KDIR = `ls linux-*/MAINTAINERS | xargs dirname`
 
-all: source builddep patch build
-
-.PHONY: source
-source:
-	apt-get source linux-image-$(KVER)
+all: builddep source patch build
 
 .PHONY: builddep
 builddep:
 	apt-get -y --no-install-recommends build-dep linux-image-$(KVER)
 	# further needed deps
 	apt-get -y --no-install-recommends install fakeroot patch
+
+.PHONY: source
+source:
+	apt-get source linux-image-$(KVER)
 
 # todo: kernel autodetection?
 .PHONY: patch
@@ -31,6 +31,6 @@ build:
 	fakeroot debian/rules clean binary-headers binary-generic
 
 .PHONY: install
-install: source builddep patch build
+install: builddep source patch build
 	dpkg -i linux*.deb
 
