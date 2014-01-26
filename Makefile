@@ -21,9 +21,17 @@ source:
 
 .PHONY: patch
 patch:
-	. /etc/lsb-release; \
-	[ "$$DISTRIB_RELEASE" = "12.04" ] && patch -d "$(KDIR)" -p1 < patches/Ubuntu-3.2.0-59.90.patch; \
-	[ "$$DISTRIB_RELEASE" = "13.10" ] && patch -d "$(KDIR)" -p1 < patches/Ubuntu-3.11.0-17.30.patch
+	@. /etc/lsb-release; \
+	echo "Detected release: $$DISTRIB_RELEASE"; \
+	case "$$DISTRIB_RELEASE" \
+	in \
+	    '12.04') \
+	        patch -d "$(KDIR)" -p1 < patches/Ubuntu-3.2.0-59.90.patch;; \
+	    '13.10') \
+	        patch -d "$(KDIR)" -p1 < patches/Ubuntu-3.11.0-17.30.patch;; \
+	    *)
+	        echo "This release is not supported.";; \
+	esac
 
 .PHONY: build
 build:
