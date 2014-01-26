@@ -29,7 +29,7 @@ patch:
 	        patch -d "$(KDIR)" -p1 < patches/Ubuntu-3.2.0-59.90.patch;; \
 	    '13.10') \
 	        patch -d "$(KDIR)" -p1 < patches/Ubuntu-3.11.0-17.30.patch;; \
-	    *)
+	    *) \
 	        echo "This release is not supported.";; \
 	esac
 
