@@ -19,10 +19,11 @@ builddep:
 source:
 	apt-get source linux-image-$(KVER)
 
-# todo: kernel autodetection?
 .PHONY: patch
 patch:
-	patch -d "$(KDIR)" -p1 < patches/Ubuntu-3.8.0-23.34.patch
+	. /etc/lsb-release; \
+	[ "$$DISTRIB_RELEASE" = "12.04" ] && patch -d "$(KDIR)" -p1 < patches/Ubuntu-3.2.0-59.90.patch; \
+	[ "$$DISTRIB_RELEASE" = "13.10" ] && patch -d "$(KDIR)" -p1 < patches/Ubuntu-3.11.0-17.30.patch
 
 .PHONY: build
 build:

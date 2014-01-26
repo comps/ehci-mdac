@@ -12,8 +12,8 @@ the kernel image, since Ubuntu compiles ehci-hcd with the kernel,
 NOT as a standalone module.
 
 The offending commits are
-3e619d04159be54b3daa0b7036b0ce9e067f4b5d
-e3420901eba65b1c46bed86d360e3a8685d20734 + 811c926c538f7e8d3c08b630dd5844efd7e000f6
+e3420901eba65b1c46bed86d360e3a8685d20734 and
+811c926c538f7e8d3c08b630dd5844efd7e000f6
 
 This tool was created for "ordinary folk", and therefore, for Ubuntu.
 If you're a skilled kernel programmer who maintains his own kernel,

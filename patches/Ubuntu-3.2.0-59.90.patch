@@ -1,24 +1,15 @@
 diff --git a/drivers/usb/host/ehci-sched.c b/drivers/usb/host/ehci-sched.c
-index 010f686..d98b300 100644
+index 34655d0..f01ff0b 100644
 --- a/drivers/usb/host/ehci-sched.c
 +++ b/drivers/usb/host/ehci-sched.c
-@@ -213,7 +213,7 @@ static inline unsigned char tt_start_uframe(struct ehci_hcd *ehci, __hc32 mask)
- }
- 
- static const unsigned char
--max_tt_usecs[] = { 125, 125, 125, 125, 125, 125, 125, 25 };
-+max_tt_usecs[] = { 125, 125, 125, 125, 125, 125, 30, 0 };
- 
- /* carryover low/fullspeed bandwidth that crosses uframe boundries */
- static inline void carryover_tt_bandwidth(unsigned short tt_usecs[8])
-@@ -1422,36 +1422,29 @@ iso_stream_schedule (
+@@ -1475,36 +1475,30 @@ iso_stream_schedule (
  	 * jump until after the queue is primed.
  	 */
  	else {
 -		int done = 0;
--
- 		base = now & ~0x07;
- 		start = base + SCHEDULING_DELAY;
+ 		start = SCHEDULE_SLOP + (now & ~0x07);
+ 
+ 		/* NOTE:  assumes URB_ISO_ASAP, to limit complexity/bugs */
  
 -		/* find a uframe slot with enough bandwidth.
 -		 * Early uframes are more precious because full-speed
@@ -53,6 +44,6 @@ index 010f686..d98b300 100644
  		/* no room in the schedule */
 -		if (!done) {
 +		if (start == next) {
- 			ehci_dbg(ehci, "iso sched full %p", urb);
+ 			ehci_dbg(ehci, "iso resched full %p (now %d max %d)\n",
+ 				urb, now, now + mod);
  			status = -ENOSPC;
- 			goto fail;
