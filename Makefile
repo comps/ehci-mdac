@@ -44,5 +44,5 @@ build:
 
 .PHONY: install
 install:
-	dpkg -i linux*.deb
+	dpkg -i linux-image*.deb
 
