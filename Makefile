@@ -7,7 +7,10 @@ KVER = $(shell uname -r)
 # (yeah, really ugly, I know)
 KDIR = `ls linux-*/MAINTAINERS | xargs dirname`
 
-all: builddep source patch build
+# "make" without args should only build
+all: debpkg
+
+debpkg: builddep source patch build
 
 .PHONY: builddep
 builddep:
@@ -40,6 +43,6 @@ build:
 	fakeroot debian/rules clean binary-headers binary-generic
 
 .PHONY: install
-install: builddep source patch build
+install:
 	dpkg -i linux*.deb
 

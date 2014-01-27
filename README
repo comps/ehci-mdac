@@ -45,7 +45,7 @@ once all is done.
 === Execution ===
 
 If you don't mind the script building the modules with root privileges,
-then by all means run "sudo make install". This is the recommended way
+then by all means run "sudo make debpkg install". This is the recommended way
 for most people.
 
 As an alternative (or for debugging purposes), you can run each step manually:
