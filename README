@@ -74,7 +74,7 @@ As an alternative (or for debugging purposes), you can run each step manually:
         in the future
 
    (untested, not dangerous, but might just not work)
-   $ sudo apt-mark hold linux-image
+   $ dpkg --get-selections | grep linux-image | awk '{print $1}' | xargs apt-mark hold
 
 
 === Cleanup ===
